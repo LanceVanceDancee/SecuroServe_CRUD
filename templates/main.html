@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Employee List{% endblock %}
+{% block content %}
+
+<h1>Skeleton Crew</h1>
+
+<form method="GET" action="/" class="search-bar">
+    <input type="text" name="search" placeholder="Search by name..." value="{{ search }}">
+    <button type="submit">Search</button>
+</form>
+
+<form method="GET" action="/" class="filter-bar">
+    <select name="role">
+        <option value="">All Roles</option>
+        {% for r in all_roles %}
+        <option value="{{ r }}" {% if r == role_filter %}selected{% endif %}>{{ r }}</option>
+        {% endfor %}
+    </select>
+
+    <select name="department">
+        <option value="">All Departments</option>
+        {% for d in all_departments %}
+        <option value="{{ d }}" {% if d == department_filter %}selected{% endif %}>{{ d }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="number" name="salary" placeholder="Min salary" value="{{ salary_filter }}">
+
+    <button type="submit">Apply Filters</button>
+    {% if search or role_filter or department_filter or salary_filter %}
+    <a href="/">Clear All</a>
+    {% endif %}
+</form>
+
+{% if employees %}
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Department</th>
+        <th>Role</th>
+        <th>Salary</th>
+        <th>Actions</th>
+    </tr>
+    {% for e in employees %}
+    <tr>
+        <td>{{ e.name }}</td>
+        <td>{{ e.department }}</td>
+        <td>{{ e.role }}</td>
+        <td>{{ e.salary }}</td>
+        <td>
+            <a href="/update/{{ e.e_id }}"><button><i class="fa-solid fa-pen"></i></button></a>
+            <a href="/delete/{{ e.e_id }}"><button><i class="fa-solid fa-trash"></i></button></a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+<a href="/add"><button>Add New Employee</button></a>
+{% else %}
+<a href="/add"><button>Add Employee Records</button></a>
+{% endif %}
+
+{% endblock %}
